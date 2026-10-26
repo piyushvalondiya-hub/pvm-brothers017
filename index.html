@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101c35">
+<title>PVM BROTHERS | Diamond Manager</title>
+
+<style>
+:root{
+  --navy:#101c35;
+  --blue:#315f91;
+  --light:#f2f5fa;
+  --gold:#e8b85c;
+  --green:#16845b;
+  --red:#d94343;
+  --border:#dce3ed;
+  --text:#18243a;
+  --muted:#6e7b90;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Noto Sans Gujarati",sans-serif;background:var(--light);color:var(--text)}
+header{background:linear-gradient(135deg,#101c35,#244d7b);color:white;padding:22px 18px;border-bottom:4px solid var(--gold)}
+.header-inner{max-width:1400px;margin:auto;display:flex;align-items:center;gap:14px}
+.logo{width:60px;height:60px;border:2px solid var(--gold);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:bold;color:var(--gold);flex-shrink:0}
+header h1{margin:0;font-size:25px;letter-spacing:1px}
+header p{margin:7px 0 0;color:#d8e3f2;font-size:13px}
+.owner{margin-left:auto;text-align:right;font-size:13px;line-height:1.8}
+.container{max-width:1400px;margin:22px auto;padding:0 16px}
+.section-title{font-size:19px;margin:0 0 15px;font-weight:bold}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:24px}
+.stat{background:white;border-radius:14px;padding:19px;border:1px solid var(--border);border-top:4px solid var(--blue);box-shadow:0 4px 15px #14233b08;min-width:0}
+.stat:nth-child(2){border-top-color:var(--gold)}
+.stat:nth-child(3){border-top-color:var(--green)}
+.stat:nth-child(4){border-top-color:#805ad5}
+.stat:nth-child(5){border-top-color:#e879a9}
+.stat-label{color:var(--muted);font-size:13px;margin-bottom:10px}
+.stat-value{font-size:26px;font-weight:bold;overflow-wrap:anywhere}
+.card{background:white;border:1px solid var(--border);border-radius:15px;padding:22px;margin-bottom:22px;box-shadow:0 4px 15px #14233b06}
+.form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-size:13px;font-weight:bold;color:#34445d}
+input{width:100%;padding:12px;border:1px solid #cfd8e5;border-radius:9px;background:#fff;color:var(--text);font-size:14px;outline:none;min-width:0}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #315f9115}
+.calculations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
+.calc-box{padding:16px;border-radius:10px;background:#f1f5fb;border:1px solid var(--border)}
+.calc-label{color:var(--muted);font-size:13px}
+.calc-value{margin-top:8px;font-size:22px;font-weight:bold}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+button{border:0;border-radius:9px;padding:12px 17px;cursor:pointer;font-weight:bold;font-size:13px}
+button:hover{filter:brightness(.95)}
+button:disabled{opacity:.6;cursor:wait}
+.btn-primary{background:var(--blue);color:white}
+.btn-dark{background:var(--navy);color:white}
+.btn-green{background:var(--green);color:white}
+.btn-light{background:#edf1f7;color:#263750}
+.btn-red{background:var(--red);color:white}
+.search-row{display:flex;gap:12px;margin-bottom:16px}
+.search-row input{max-width:450px}
+.table-wrap{width:100%;overflow-x:auto;border:1px solid var(--border);border-radius:10px}
+table{width:100%;border-collapse:collapse;min-width:1250px;background:white}
+thead{background:var(--navy);color:white}
+th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--border);font-size:13px;white-space:nowrap}
+tbody tr:hover{background:#f7f9fc}
+.empty{text-align:center;padding:30px;color:var(--muted)}
+.status{font-size:12px;color:var(--green);margin-top:12px;line-height:1.6}
+.auth-card{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.auth-info{flex:1;min-width:180px}
+.auth-title{font-weight:bold}
+.auth-sub{font-size:12px;color:var(--muted);margin-top:5px}
+footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
+@media(max-width:900px){
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .owner{display:none}
+}
+@media(max-width:520px){
+ header{padding:17px 12px}
+ header h1{font-size:20px}
+ .logo{width:48px;height:48px;font-size:20px}
+ .container{padding:0 10px;margin:15px auto}
+ .card{padding:15px}
+ .stats{gap:9px}
+ .stat{padding:13px}
+ .stat-value{font-size:21px}
+ .stat-label{font-size:12px}
+ .form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ input{padding:10px;font-size:13px}
+ .calculations{gap:9px}
+ .calc-box{padding:12px}
+ .calc-value{font-size:19px}
+ button{padding:11px 12px}
+ .search-row{flex-wrap:wrap}
+}
+@media print{
+ .no-print,.actions,.search-row,.delete-col{display:none!important}
+ body{background:white}
+ .container{max-width:none;margin:0;padding:0}
+ .card,.stat{box-shadow:none}
+ .table-wrap{overflow:visible}
+ table{min-width:0}
+ th,td{font-size:9px;padding:6px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="header-inner">
+  <div class="logo">PV</div>
+  <div>
+   <h1>PVM BROTHERS</h1>
+   <p>DIAMOND FACTORY MANAGEMENT SYSTEM</p>
+  </div>
+  <div class="owner">
+   <strong>Diamond Register</strong><br>
+   Owner: Kantibhai Dhirubhai Parmar
+  </div>
+ </div>
+</header>
+
+<main class="container">
+
+<section class="card auth-card no-print">
+ <div class="auth-info">
+  <div class="auth-title">🔐 Google Login</div>
+  <div class="auth-sub" id="authMessage">Google Account thi login karo.</div>
+ </div>
+ <button type="button" class="btn-primary" id="loginBtn">Google Login</button>
+ <button type="button" class="btn-light" id="logoutBtn" hidden>Logout</button>
+ <div class="status" id="cloudStatus" style="width:100%">
+  Login vagar data aa device ma save thashe.
+ </div>
+</section>
+
+<h2 class="section-title">📊 Dashboard — કુલ હિસાબ</h2>
+
+<section class="stats">
+ <div class="stat"><div class="stat-label">📦 કુલ લોટ</div><div class="stat-value" id="totalLots">0</div></div>
+ <div class="stat"><div class="stat-label">💎 કુલ નંગ</div><div class="stat-value" id="totalNang">0</div></div>
+ <div class="stat"><div class="stat-label">⚖️ કુલ વજન</div><div class="stat-value" id="totalWeight">0</div></div>
+ <div class="stat"><div class="stat-label">💎 કુલ તૈયાર વજન</div><div class="stat-value" id="totalReady">0</div></div>
+ <div class="stat"><div class="stat-label">💰 કુલ રકમ</div><div class="stat-value" id="totalAmount">₹0</div></div>
+</section>
+
+<section class="card">
+ <h2 class="section-title" id="formTitle">📝 નવો લોટ ઉમેરો</h2>
+
+ <form id="lotForm">
+  <div class="form-grid">
+   <div class="field"><label for="date">તારીખ</label><input type="date" id="date"></div>
+   <div class="field"><label for="worker">કારખાનેદારનું નામ</label><input type="text" id="worker" placeholder="કારખાનેદારનું નામ"></div>
+   <div class="field"><label for="account">ખાતાનું નામ</label><input type="text" id="account" placeholder="ખાતાનું નામ"></div>
+   <div class="field"><label for="lot">લોટ નંબર</label><input type="text" id="lot" placeholder="લોટ નંબર"></div>
+   <div class="field"><label for="thaan">નંગ</label><input type="number" id="thaan" step="any" min="0" placeholder="નંગ"></div>
+   <div class="field"><label for="raw">વજન</label><input type="number" id="raw" step="any" placeholder="વજન"></div>
+   <div class="field"><label for="kacha">કાચા</label><input type="number" id="kacha" step="any" placeholder="કાચા"></div>
+   <div class="field"><label for="ready">તૈયાર વજન</label><input type="number" id="ready" step="any" placeholder="તૈયાર વજન"></div>
+   <div class="field"><label for="rate">ભાવ (Rate)</label><input type="number" id="rate" step="any" placeholder="ભાવ"></div>
+   <div class="field"><label for="returnDate">પરત તારીખ</label><input type="date" id="returnDate"></div>
+   <div class="field" style="grid-column:span 2"><label for="remark">નોંધ</label><input type="text" id="remark" placeholder="નોંધ લખો"></div>
+  </div>
+
+  <div class="calculations">
+   <div class="calc-box">
+    <div class="calc-label">વજનનો તફાવત (વજન − તૈયાર વજન)</div>
+    <div class="calc-value" id="difference">—</div>
+   </div>
+   <div class="calc-box">
+    <div class="calc-label">કુલ રકમ (નંગ × ભાવ)</div>
+    <div class="calc-value" id="calculatedAmount">₹0</div>
+   </div>
+  </div>
+
+  <div class="actions">
+   <button type="submit" class="btn-primary" id="saveBtn">＋ લોટ સેવ કરો</button>
+   <button type="button" class="btn-light" id="resetBtn">નવું / સાફ કરો</button>
+  </div>
+  <div class="status" id="saveStatus">ડેટા આ ડિવાઇસમાં સેવ થશે.</div>
+ </form>
+</section>
+
+<section class="card">
+ <h2 class="section-title">📒 લોટ રજિસ્ટર</h2>
+
+ <div class="search-row no-print">
+  <input type="search" id="search" placeholder="લોટ નંબર, કારખાનેદાર અથવા તારીખ શોધો...">
+  <button type="button" class="btn-light" id="searchBtn">🔍 શોધો</button>
+ </div>
+
+ <div class="actions no-print" style="margin:0 0 16px">
+  <button type="button" class="btn-green" id="exportBtn">⬇ Excel / CSV</button>
+  <button type="button" class="btn-dark" id="printBtn">🖨 Print / PDF</button>
+  <button type="button" class="btn-light" id="blankBtn">＋ ખાલી લાઇન</button>
+  <button type="button" class="btn-red" id="deleteAllBtn">બધા રેકોર્ડ કાઢો</button>
+ </div>
+
+ <div class="table-wrap">
+  <table>
+   <thead>
+    <tr>
+     <th>ક્રમ</th><th>તારીખ</th><th>કારખાનેદારનું નામ</th>
+     <th>ખાતું</th><th>લોટ નંબર</th><th>નંગ</th><th>વજન</th>
+     <th>કાચા</th><th>તૈયાર વજન</th><th>તફાવત</th>
+     <th>પરત તારીખ</th><th>ભાવ</th><th>રકમ (₹)</th><th>નોંધ</th>
+     <th class="delete-col no-print">ક્રિયા</th>
+    </tr>
+   </thead>
+   <tbody id="tableBody">
+    <tr><td colspan="15" class="empty">લોડ થઈ રહ્યું છે...</td></tr>
+   </tbody>
+  </table>
+ </div>
+</section>
+
+</main>
+
+<footer>PVM BROTHERS © Diamond Manager</footer>
+
+<!-- Google Login: Firebase Authentication -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+import {
+ getAuth, GoogleAuthProvider, signInWithPopup,
+ onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+
+const firebaseConfig = {
+ apiKey: "AIzaSyDJojRWqiza0vqMFvu0aMVH7bT7wDYq8vU",
+ authDomain: "pvm-brothers-4be69.firebaseapp.com",
+ projectId: "pvm-brothers-4be69",
+ storageBucket: "pvm-brothers-4be69.firebasestorage.app",
+ messagingSenderId: "926518964692",
+ appId: "1:926518964692:web:4ad9c4d49b43217717a641"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const provider = new GoogleAuthProvider();
+provider.setCustomParameters({prompt:"select_account"});
+
+document.getElementById("loginBtn").addEventListener("click",async()=>{
+ const button=document.getElementById("loginBtn");
+ button.disabled=true;
+ document.getElementById("cloudStatus").textContent="Google Login sharu thay chhe...";
+ try{
+  await signInWithPopup(auth,provider);
+ }catch(error){
+  console.error(error);
+  document.getElementById("cloudStatus").textContent=
+   "Login error: "+error.message+
+   " — Firebase Authorized Domains ane HTTPS hosting check karo.";
+ }finally{
+  button.disabled=false;
+ }
+});
+
+document.getElementById("logoutBtn").addEventListener("click",async()=>{
+ try{
+  await signOut(auth);
+ }catch(error){
+  document.getElementById("cloudStatus").textContent="Logout error: "+error.message;
+ }
+});
+
+onAuthStateChanged(auth,user=>{
+ document.getElementById("loginBtn").hidden=!!user;
+ document.getElementById("logoutBtn").hidden=!user;
+ document.getElementById("authMessage").textContent=user
+  ? "Login: "+(user.email||"Google Account")
+  : "Google Account thi login karo.";
+ document.getElementById("cloudStatus").textContent=user
+  ? "✅ Google Login safal. Cloud Backup nu setup pachhi karishu."
+  : "Login vagar data aa device ma save thashe.";
+});
+</script>
+
+<!-- Diamond Register -->
+<script>
+"use strict";
+
+const STORAGE_KEY="pvm_brothers_diamond_register_v1";
+const fields=["date","worker","account","lot","thaan","raw","kacha","ready","rate","returnDate","remark"];
+
+let data=loadLocalData();
+let editingId=null;
+
+function loadLocalData(){
+ try{
+  const saved=localStorage.getItem(STORAGE_KEY);
+  return saved?JSON.parse(saved):[];
+ }catch(error){return [];}
+}
+
+function persistLocal(){
+ try{
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  return true;
+ }catch(error){
+  setSaveStatus("⚠️ Device ma data save na thayu.");
+  return false;
+ }
+}
+
+function setSaveStatus(message){
+ document.getElementById("saveStatus").textContent=message;
+}
+
+function value(id){
+ return document.getElementById(id).value.trim();
+}
+
+function numberValue(id){
+ const v=value(id);
+ return v===""?0:(Number(v)||0);
+}
+
+function fmt(n){
+ return Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:3});
+}
+
+function money(n){
+ return "₹"+Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:2});
+}
+
+function calculate(){
+ const rawText=value("raw");
+ const readyText=value("ready");
+ const raw=numberValue("raw");
+ const ready=numberValue("ready");
+ const thaan=numberValue("thaan");
+ const rate=numberValue("rate");
+
+ document.getElementById("difference").textContent=
+  rawText===""&&readyText===""?"—":fmt(raw-ready);
+ document.getElementById("calculatedAmount").textContent=money(thaan*rate);
+}
+
+["raw","ready","thaan","rate"].forEach(id=>{
+ document.getElementById(id).addEventListener("input",calculate);
+});
+
+function getFormData(){
+ const item={};
+ fields.forEach(key=>item[key]=value(key));
+
+ ["thaan","raw","kacha","ready","rate"].forEach(key=>{
+  item[key]=item[key]===""?"":Number(item[key]);
+ });
+
+ item.difference=(Number(item.raw)||0)-(Number(item.ready)||0);
+ item.amount=(Number(item.thaan)||0)*(Number(item.rate)||0);
+ return item;
+}
+
+function saveLocalStatus(){
+ const ok=persistLocal();
+ setSaveStatus(ok
+  ?"✅ ડેટા આ ડિવાઇસમાં સેવ થયો."
+  :"⚠️ ડેટા સેવ કરવામાં સમસ્યા આવી.");
+}
+
+document.getElementById("lotForm").addEventListener("submit",event=>{
+ event.preventDefault();
+
+ const item=getFormData();
+
+ if(!item.lot&&!item.worker&&!item.account){
+  alert("લોટ નંબર, કારખાનેદારનું નામ અથવા ખાતાનું નામ લખો.");
+  return;
+ }
+
+ if(editingId!==null){
+  const index=data.findIndex(x=>x.id===editingId);
+  if(index!==-1){
+   data[index]={...data[index],...item,id:editingId};
+  }
+ }else{
+  item.id=Date.now().toString()+Math.random().toString(16).slice(2);
+  item.createdAt=new Date().toISOString();
+  data.unshift(item);
+ }
+
+ resetForm();
+ render();
+ saveLocalStatus();
+});
+
+function resetForm(){
+ document.getElementById("lotForm").reset();
+ editingId=null;
+ document.getElementById("formTitle").textContent="📝 નવો લોટ ઉમેરો";
+ document.getElementById("saveBtn").textContent="＋ લોટ સેવ કરો";
+ document.getElementById("difference").textContent="—";
+ document.getElementById("calculatedAmount").textContent="₹0";
+}
+
+document.getElementById("resetBtn").addEventListener("click",resetForm);
+
+function editItem(id){
+ const item=data.find(x=>x.id===id);
+ if(!item)return;
+
+ editingId=id;
+ fields.forEach(key=>{
+  document.getElementById(key).value=
+   item[key]===undefined||item[key]===null?"":item[key];
+ });
+
+ document.getElementById("formTitle").textContent="✏️ લોટમાં ફેરફાર કરો";
+ document.getElementById("saveBtn").textContent="💾 ફેરફાર સેવ કરો";
+ calculate();
+ document.getElementById("lotForm").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function deleteItem(id){
+ if(!confirm("આ લોટનો રેકોર્ડ કાઢી નાખવો છે?"))return;
+ data=data.filter(item=>item.id!==id);
+ render();
+ saveLocalStatus();
+}
+
+function deleteAll(){
+ if(data.length===0){
+  alert("કાઢવા માટે કોઈ રેકોર્ડ નથી.");
+  return;
+ }
+
+ if(!confirm("શું બધા રેકોર્ડ કાયમી રીતે કાઢી નાખવા છે?"))return;
+
+ data=[];
+ resetForm();
+ render();
+ saveLocalStatus();
+}
+
+function addBlank(){
+ const item={};
+ fields.forEach(key=>item[key]="");
+ item.id=Date.now().toString()+Math.random().toString(16).slice(2);
+ item.blank=true;
+ data.unshift(item);
+ render();
+ editItem(item.id);
+ saveLocalStatus();
+}
+
+function escapeHTML(text){
+ return String(text??"").replace(/[&<>"']/g,ch=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[ch]));
+}
+
+function render(){
+ const query=document.getElementById("search").value.trim().toLowerCase();
+
+ const visible=data.filter(item=>
+  fields.map(key=>item[key]??"").join(" ").toLowerCase().includes(query)
+ );
+
+ const totalNang=data.reduce((sum,item)=>sum+(Number(item.thaan)||0),0);
+ const totalWeight=data.reduce((sum,item)=>sum+(Number(item.raw)||0),0);
+ const totalReady=data.reduce((sum,item)=>sum+(Number(item.ready)||0),0);
+ const totalAmount=data.reduce((sum,item)=>sum+
+  ((Number(item.thaan)||0)*(Number(item.rate)||0)),0);
+
+ document.getElementById("totalLots").textContent=data.length;
+ document.getElementById("totalNang").textContent=fmt(totalNang);
+ document.getElementById("totalWeight").textContent=fmt(totalWeight);
+ document.getElementById("totalReady").textContent=fmt(totalReady);
+ document.getElementById("totalAmount").textContent=money(totalAmount);
+
+ const tbody=document.getElementById("tableBody");
+
+ if(!visible.length){
+  tbody.innerHTML='<tr><td colspan="15" class="empty">કોઈ રેકોર્ડ મળ્યો નથી.</td></tr>';
+  return;
+ }
+
+ tbody.innerHTML=visible.map((item,index)=>{
+  const diff=(Number(item.raw)||0)-(Number(item.ready)||0);
+  const amount=(Number(item.thaan)||0)*(Number(item.rate)||0);
+
+  return `<tr>
+   <td>${index+1}</td>
+   <td>${escapeHTML(item.date)}</td>
+   <td>${escapeHTML(item.worker)}</td>
+   <td>${escapeHTML(item.account)}</td>
+   <td><strong>${escapeHTML(item.lot)}</strong></td>
+   <td>${escapeHTML(item.thaan)}</td>
+   <td>${escapeHTML(item.raw)}</td>
+   <td>${escapeHTML(item.kacha)}</td>
+   <td>${escapeHTML(item.ready)}</td>
+   <td>${fmt(diff)}</td>
+   <td>${escapeHTML(item.returnDate)}</td>
+   <td>${escapeHTML(item.rate)}</td>
+   <td>${money(amount)}</td>
+   <td>${escapeHTML(item.remark)}</td>
+   <td class="delete-col no-print">
+    <button type="button" class="btn-light" data-edit="${escapeHTML(item.id)}">Edit</button>
+    <button type="button" class="btn-red" data-delete="${escapeHTML(item.id)}">✕</button>
+   </td>
+  </tr>`;
+ }).join("");
+
+ tbody.querySelectorAll("[data-edit]").forEach(button=>{
+  button.addEventListener("click",()=>editItem(button.dataset.edit));
+ });
+
+ tbody.querySelectorAll("[data-delete]").forEach(button=>{
+  button.addEventListener("click",()=>deleteItem(button.dataset.delete));
+ });
+}
+
+document.getElementById("searchBtn").addEventListener("click",render);
+document.getElementById("search").addEventListener("input",render);
+document.getElementById("blankBtn").addEventListener("click",addBlank);
+document.getElementById("deleteAllBtn").addEventListener("click",deleteAll);
+document.getElementById("printBtn").addEventListener("click",()=>window.print());
+
+function exportCSV(){
+ if(data.length===0){
+  alert("Export કરવા માટે કોઈ રેકોર્ડ નથી.");
+  return;
+ }
+
+ const headers=[
+  "ક્રમ","તારીખ","કારખાનેદારનું નામ","ખાતું","લોટ નંબર",
+  "નંગ","વજન","કાચા","તૈયાર વજન","તફાવત",
+  "પરત તારીખ","ભાવ","રકમ","નોંધ"
+ ];
+
+ const rows=data.map((item,index)=>[
+  index+1,item.date,item.worker,item.account,item.lot,
+  item.thaan,item.raw,item.kacha,item.ready,
+  (Number(item.raw)||0)-(Number(item.ready)||0),
+  item.returnDate,item.rate,
+  (Number(item.thaan)||0)*(Number(item.rate)||0),
+  item.remark
+ ]);
+
+ const csv=[headers,...rows].map(row=>
+  row.map(cell=>'"'+String(cell??"").replace(/"/g,'""')+'"').join(",")
+ ).join("\r\n");
+
+ const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+ const url=URL.createObjectURL(blob);
+ const link=document.createElement("a");
+ link.href=url;
+ link.download="PVM_BROTHERS_Diamond_Register.csv";
+ document.body.appendChild(link);
+ link.click();
+ link.remove();
+ URL.revokeObjectURL(url);
+}
+
+document.getElementById("exportBtn").addEventListener("click",exportCSV);
+
+render();
+</script>
+
+</body>
+</html>
